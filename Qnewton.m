@@ -7,13 +7,15 @@ function[H] = Qnewton(x, x0, l, g, g0, j, j0, H0, choix)
         else
             H = H0;
         end
-    else % SR1
+    elseif choix == 2 % SR1
         %if d0' * (y0 - H0 * d0) ~= 0
         if d0' * (y0 - H0 * d0) > 1e-14 || d0' * (y0 - H0 * d0) < -1e-14
             H = H0 + (y0 - H0*d0) * (y0 - H0*d0)' / (d0'*(y0 - H0*d0));
         else
             H = H0;
         end
+    else
+        printf("Error: invalid choix")
     end
 end
 
