@@ -7,14 +7,15 @@ clear all
 %Ariane test
 
 steps = [[0.1101, 2647.2]; [0.1532, 2922.4]; [0.2154, 4344.3]];
-m_0 = [1e5; 3e4; 3e4];
+m_0 = [1e5; 5e4; 1e4];
 m_u = 1700;
 V = 11527;
 m_3 = @(m) steps(3, 2) * log((m_u+(1+steps(3, 1))*m(3))/(m_u+steps(3, 1)*m(3)));
 m_2 = @(m) steps(2, 2) * log((m_u+(1+steps(3, 1))*m(3)+(1+steps(2, 1))*m(2))/(m_u+(1+steps(3, 1))*m(3)+steps(2, 1)*m(2)));
 m_1 = @(m) steps(1, 2) * log((m_u+(1+steps(3, 1))*m(3)+(1+steps(2, 1))*m(2)+(1+steps(1, 1))*m(1))/(m_u+(1+steps(3, 1))*m(3)+(1+steps(2, 1))*m(2)+steps(1, 1)*m(1)));
 F = @(m) [m_u + dot((1 + steps(1:3, 1)), m); -V + m_1(m) + m_2(m) + m_3(m)];
-domain = [[0, 2e5]; [0, 1e5]; [0, 1e4]];
+domain = [[0, 2e5]; [0, 7e4]; [0, 1e4]];
 ms = [145349; 31215; 7933];
 
-[m,~,~,k] = SQP(m_0, F,0.0001, domain, 100,1)
+[m,~,~,k] = SQP(m_0, F,0.0001, domain, 200,1)
+m
