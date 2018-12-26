@@ -1,26 +1,35 @@
 function [x, g, j, k] = SQP(x_0, F, eps, domain, kiter, choix)
+    g_eps = 1e-9;
     n = length(x_0);
     k = 0;
-    rho = 1 / eps^2;
+    rho = 1e9;
     F_0 = F(x_0);
     m = length(F_0) - 1;
     H = eye(n); % differentiel seconde par rapport a x
     c = 0.1;
-    [g, j] = Gradient(x_0, F, repmat(eps^2, 1, n));
+    [g, j] = Gradient(x_0, F, repmat(g_eps, 1, n));
     [d, l] = pq(H, j', g, -F_0(2:m+1));
     x = x_0 + d;
     x = Proj(x, domain);
     l_0 = l;
     g_0 = g + 1 + eps;
+        for i = 1:length(x_0)
+            printf(" %f", x_0(i));
+        end
+        printf("\n");
     % SQP, le grand mystere
-    while k < kiter && norm(g - g_0, 1) + norm(x - x_0, 1) >= eps
-    %while k < kiter
+    %while k < kiter && norm(g - g_0, 1) + norm(x - x_0, 1) >= eps
+    while k < kiter
+        for i = 1:length(x)
+            printf(" %f", x(i));
+        end
+        printf("\n");
         g_0 = g;
         j_0 = j;
-        [g, j] = Gradient(x, F, repmat(eps^2, 1, n));
+        [g, j] = Gradient(x, F, repmat(g_eps, 1, n));
         H_0 = H;
         H = Qnewton(x, x_0, l, g, g_0, j, j_0, H_0, choix);
-        H = H_modification(H);
+        H = H_modification(H, 1e3);
         F_0 = F(x_0);
         x_0 = x;
         [d, l] = pq(H, j', g, -F_0(2:m+1));
