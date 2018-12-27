@@ -21,7 +21,7 @@ function[H] = Qnewton(x, x_0, l, g, g_0, j, j_0, H_0, choix)
             H = H_0 + (y0 - H_0*d_0) * (y0 - H_0*d_0)' / (d_0'*(y0 - H_0*d_0));
         end
     else
-        printf("Error: invalid choix")
+        fprintf("Error: invalid choix")
     end
 end
 

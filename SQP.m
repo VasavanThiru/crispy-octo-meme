@@ -9,21 +9,25 @@ function [x, g, j, k] = SQP(x_0, F, eps, domain, kiter, choix)
     c = 0.1;
     [g, j] = Gradient(x_0, F, repmat(g_eps, 1, n));
     [d, l] = pq(H, j', g, -F_0(2:m+1));
-    x = x_0 + d;
+    l_0 = l;
+    %x = x_0 + d;
+    g_0 = g;
+    [x, dx, H] = Globalisation(x_0, l_0, d, F, g_0, H, c, rho);
+    d = dx;
     x = Proj(x, domain);
     l_0 = l;
     g_0 = g + 1 + eps;
         for i = 1:length(x_0)
-            printf(" %f", x_0(i));
+            fprintf(" %f", x_0(i));
         end
-        printf("\n");
+        fprintf("\n");
     % SQP, le grand mystere
     %while k < kiter && norm(g - g_0, 1) + norm(x - x_0, 1) >= eps
     while k < kiter
         for i = 1:length(x)
-            printf(" %f", x(i));
+            fprintf(" %f", x(i));
         end
-        printf("\n");
+        fprintf("\n");
         g_0 = g;
         j_0 = j;
         [g, j] = Gradient(x, F, repmat(g_eps, 1, n));

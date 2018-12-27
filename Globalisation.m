@@ -30,6 +30,7 @@ function [x, dx, H] = Globalisation(x_0, l, d, F, g_0, H_i, c, rho)
             k = k + 1;
         end
         if k == m % Si aucun direction de descente n'est trouvee
+            fprintf("Aucun direction de descente trouvee\n");
             fprintf("Reinitialisation du hessien\n");
             H_i = eye(n);
         end
@@ -39,6 +40,7 @@ function [x, dx, H] = Globalisation(x_0, l, d, F, g_0, H_i, c, rho)
             k = k + 1;
         end
         if k == kmax
+            fprintf("Aucun pas trouve\n");
             fprintf("Reinitialisation du hessien\n");
             H_i = eye(n);
         end
