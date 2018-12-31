@@ -17,4 +17,4 @@ F = @(m) [m_u + dot((1 + ep(1:3, 1)), m); -V + m_1(m) + m_2(m) + m_3(m)];
 domain = [[1e5, 2e5]; [1e4, 5e4]; [5e3, 1e4]];
 m_s = [145349; 31215; 7933]; % masses d'ergols
 
-[m,~,~,k] = SQP(m_0, F, 1e-6, domain, 30, 2)
+[m,~,~,k] = SQP(m_0, F, 1e-6, domain, 30, 2, 0)
