@@ -1,5 +1,5 @@
-function [x, g, j, k] = SQP(x_0, F, eps, domain, kiter, choix)
-    g_eps = 1e-9;
+function [x, g, j, k] = SQP(x_0, F, eps, domain, kiter, choix, to_print)
+    g_eps = 1e-5;
     n = length(x_0);
     k = 0;
     rho = 1e9;
@@ -17,17 +17,22 @@ function [x, g, j, k] = SQP(x_0, F, eps, domain, kiter, choix)
     x = Proj(x, domain);
     l_0 = l;
     g_0 = g + 1 + eps;
+    if to_print == 1
         for i = 1:length(x_0)
             fprintf(" %f", x_0(i));
         end
         fprintf("\n");
+    end
     % SQP, le grand mystere
-    %while k < kiter && norm(g - g_0, 1) + norm(x - x_0, 1) >= eps
-    while k < kiter
-        for i = 1:length(x)
-            fprintf(" %f", x(i));
+    while k < kiter && norm(g, 1) >= eps
+    %while k < kiter && norm(g, 1) >= eps && norm(x - x_0, 1) >= eps
+    %while k < kiter
+        if to_print == 1
+            for i = 1:length(x)
+                fprintf(" %f", x(i));
+            end
+            fprintf("\n");
         end
-        fprintf("\n");
         g_0 = g;
         j_0 = j;
         [g, j] = Gradient(x, F, repmat(g_eps, 1, n));

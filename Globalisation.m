@@ -16,7 +16,8 @@ function [x, dx, H] = Globalisation(x_0, l, d, F, g_0, H_i, c, rho)
     subindex = @(A, r, c) A(r:c);
     rho_c_0 = rho * norm(subindex(F(x_0), 2, m + 1), 1);
     % f_eps = @(X) [[1; l]' * F(X) + rho * norm(subindex(F(X), 2, m + 1), 1)];
-    f_eps = @(X) [subindex(F(X), 1, 1) + rho * norm(subindex(F(X), 2, m + 1), 1)];
+    % f_eps = @(X) [subindex(F(X), 1, 1) + rho * norm(subindex(F(X), 2, m + 1), 1)];
+    f_eps = @(X) [X + rho * norm(subindex(F(X), 2, m + 1), 1)]; % FAUX
     f_0 = f_eps(x_0);
     if f_eps(x_0 + s * d) >= f_0 % La fonction de merite ne decroit pas
         k = 0;
@@ -25,7 +26,8 @@ function [x, dx, H] = Globalisation(x_0, l, d, F, g_0, H_i, c, rho)
             rho = rho + max(l);
             rho_c_0 = rho * norm(subindex(F(x_0), 2, m + 1), 1);
             % f_eps = @(X) [[1; l]' * F(X) + rho * norm(subindex(F(X), 2, m + 1), 1)];
-            f_eps = @(X) [subindex(F(X), 1, 1) + rho * norm(subindex(F(X), 2, m + 1), 1)];
+            % f_eps = @(X) [subindex(F(X), 1, 1) + rho * norm(subindex(F(X), 2, m + 1), 1)];
+            f_eps = @(X) [X + rho * norm(subindex(F(X), 2, m + 1), 1)]; % FAUX
             y = g_0' * d - rho_c_0;
             k = k + 1;
         end
@@ -41,8 +43,8 @@ function [x, dx, H] = Globalisation(x_0, l, d, F, g_0, H_i, c, rho)
         end
         if k == kmax
             fprintf("Aucun pas trouve\n");
-            fprintf("Reinitialisation du hessien\n");
-            H_i = eye(n);
+            % fprintf("Reinitialisation du hessien\n");
+            % H_i = eye(n);
         end
     end
     x = x_0 + s * d;
