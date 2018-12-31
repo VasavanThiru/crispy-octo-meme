@@ -15,9 +15,9 @@ function [x, dx, H] = Globalisation(x_0, l, d, F, g_0, H_i, c, rho)
     m = length(l);
     subindex = @(A, r, c) A(r:c);
     rho_c_0 = rho * norm(subindex(F(x_0), 2, m + 1), 1);
-    % f_eps = @(X) [[1; l]' * F(X) + rho * norm(subindex(F(X), 2, m + 1), 1)];
+    f_eps = @(X) [[1; l]' * F(X) + rho * norm(subindex(F(X), 2, m + 1), 1)];
     % f_eps = @(X) [subindex(F(X), 1, 1) + rho * norm(subindex(F(X), 2, m + 1), 1)];
-    f_eps = @(X) [X + rho * norm(subindex(F(X), 2, m + 1), 1)]; % FAUX
+    % f_eps = @(X) [X + rho * norm(subindex(F(X), 2, m + 1), 1)]; % FAUX
     f_0 = f_eps(x_0);
     if f_eps(x_0 + s * d) >= f_0 % La fonction de merite ne decroit pas
         k = 0;
@@ -25,9 +25,9 @@ function [x, dx, H] = Globalisation(x_0, l, d, F, g_0, H_i, c, rho)
         while y > 0 && k < m % Recherche d'une direction de descente f_eps'(x_0) < 0
             rho = rho + max(l);
             rho_c_0 = rho * norm(subindex(F(x_0), 2, m + 1), 1);
-            % f_eps = @(X) [[1; l]' * F(X) + rho * norm(subindex(F(X), 2, m + 1), 1)];
+            f_eps = @(X) [[1; l]' * F(X) + rho * norm(subindex(F(X), 2, m + 1), 1)];
             % f_eps = @(X) [subindex(F(X), 1, 1) + rho * norm(subindex(F(X), 2, m + 1), 1)];
-            f_eps = @(X) [X + rho * norm(subindex(F(X), 2, m + 1), 1)]; % FAUX
+            % f_eps = @(X) [X + rho * norm(subindex(F(X), 2, m + 1), 1)]; % FAUX
             y = g_0' * d - rho_c_0;
             k = k + 1;
         end
