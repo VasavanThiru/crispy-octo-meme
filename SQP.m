@@ -12,6 +12,7 @@ function [x, g, j, k] = SQP(x_0, F, eps, domain, kiter, choix, to_print)
     l_0 = l;
     %x = x_0 + d;
     g_0 = g;
+    j_0 = j;
     [x, dx, H] = Globalisation(x_0, l_0, d, F, F_0, g_0, H, c, rho);
     d = dx;
     x = Proj(x, domain);
@@ -30,8 +31,12 @@ function [x, g, j, k] = SQP(x_0, F, eps, domain, kiter, choix, to_print)
     %while k < kiter
         if to_print == 1
             for i = 1:length(x)
-                fprintf(" %f", x(i));
+                fprintf(" %.3f", x(i));
             end
+            for i = 1:length(l)
+                fprintf(" %.3f", l(i));
+            end
+            fprintf(" %.3f", norm(g_0 + j_0 * l, 2));
             fprintf("\n");
         end
         g_0 = g;
